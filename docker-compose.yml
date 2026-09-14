@@ -1,0 +1,8 @@
+services:
+
+  customer-churn-api:
+    build: .
+    container_name: customer-churn-container
+
+    ports:
+      - "8000:8000"

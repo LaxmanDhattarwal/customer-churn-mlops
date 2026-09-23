@@ -101,6 +101,15 @@ model = Pipeline(
         ("classifier", LogisticRegression(max_iter=1000))
     ]
 )
+rf_model = Pipeline(
+    steps=[
+        ("preprocessor", preprocessor),
+        ("classifier", RandomForestClassifier(
+            n_estimators=100,
+            random_state=42
+        ))
+    ]
+)
 with mlflow.start_run():
 
     model.fit(X_train, y_train)
@@ -128,10 +137,40 @@ with mlflow.start_run():
     mlflow.log_metric("f1_score", f1)
 
     mlflow.sklearn.log_model(
-        model,
-        "model"
+        sk_model=model,
+        name="model"
     )
 
+with mlflow.start_run():
+
+    rf_model.fit(X_train, y_train)
+
+    rf_y_pred = rf_model.predict(X_test)
+
+    rf_accuracy = accuracy_score(y_test, rf_y_pred)
+    rf_precision = precision_score(y_test, rf_y_pred)
+    rf_recall = recall_score(y_test, rf_y_pred)
+    rf_f1 = f1_score(y_test, rf_y_pred)
+
+    print("Random Forest Accuracy:", rf_accuracy)
+    print("Random Forest Precision:", rf_precision)
+    print("Random Forest Recall:", rf_recall)
+    print("Random Forest F1 Score:", rf_f1)
+
+    mlflow.log_param("model", "RandomForestClassifier")
+    mlflow.log_param("n_estimators", 100)
+    mlflow.log_param("random_state", 42)
+
+    mlflow.log_metric("accuracy", rf_accuracy)
+    mlflow.log_metric("precision", rf_precision)
+    mlflow.log_metric("recall", rf_recall)
+    mlflow.log_metric("f1_score", rf_f1)
+
+    mlflow.sklearn.log_model(
+    sk_model=rf_model,
+    name="random_forest_model",
+    skops_trusted_types=["sklearn.tree._tree.Tree"]
+)
 
 MODEL_PATH = "ml/models/model.joblib"
 

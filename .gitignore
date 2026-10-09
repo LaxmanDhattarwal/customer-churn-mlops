@@ -141,3 +141,22 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# MLflow
+mlflow.db
+mlruns/
+
+# DVC local storage
+dvc-storage/
+
+# Python testing
+.pytest_cache/
+.coverage
+htmlcov/

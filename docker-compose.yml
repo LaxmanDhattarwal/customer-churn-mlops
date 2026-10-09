@@ -2,7 +2,12 @@ services:
 
   customer-churn-api:
     build: .
-    container_name: customer-churn-container
-
+    container_name: customer-churn-api
     ports:
       - "8000:8000"
+
+  customer-churn-frontend:
+    build: ./frontend
+    container_name: customer-churn-frontend
+    ports:
+      - "5173:80"

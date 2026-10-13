@@ -11,12 +11,18 @@ MODEL_PATH = "ml/models/model.joblib"
 model = joblib.load(MODEL_PATH)
 
 app= FastAPI()
+
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[
+        "https://customer-churn-frontend-sfxl.onrender.com",
+        "http://localhost:5173",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 
